@@ -98,18 +98,13 @@ public class AuthController {
     } else {
       strRoles.forEach(role -> {
         switch (role) {
-        case "admin":
+        case "ROLE_ADMIN":
           Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(adminRole);
 
           break;
-        case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(modRole);
 
-          break;
         default:
           Role userRole = roleRepository.findByName(ERole.ROLE_USER)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -130,5 +125,26 @@ public class AuthController {
   @GetMapping("/users")
   public List<User> getAllUsers(){
     return userRepository.findAll();
+  }
+
+  @DeleteMapping("user/{id}")
+  public void deleteUser(@PathVariable Long id){
+    userRepository.deleteById(id);
+  }
+  @GetMapping("users/user/{id}")
+  public Optional<User> getUserById(@PathVariable Long id){
+    return userRepository.findById(id);
+  }
+
+  @PutMapping("users/update/{id}")
+  public User updateUser(@PathVariable Integer id, @RequestBody User user){
+    User user1 = userRepository.findUserById(id);
+    user1.setFirstname(user.getFirstname());
+    user1.setLastname(user.getLastname());
+    user1.setEmail(user.getEmail());
+    user1.setPassword(user.getPassword());
+    user1.setAddress(user.getAddress());
+    user1.setPhone(user.getPhone());
+    return userRepository.save(user1);
   }
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Setter
 @Getter
@@ -23,8 +24,9 @@ public class GarbagePt {
     private String lat;
     private String lon;
     private LocalDate createdOn;
-    @OneToOne
-    private Board board;
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "garbage_point_id")
+    private List<WasteLevel> wasteLevels;
     public LocalDate getCreatedOn() {
         return LocalDate.now();
     }

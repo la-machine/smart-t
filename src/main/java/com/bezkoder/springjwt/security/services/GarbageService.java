@@ -33,4 +33,12 @@ public class GarbageService {
         garbagePt1.setCreatedOn(garbagePt.getCreatedOn());
         return garbagePtRepository.save(garbagePt1);
     }
+
+    public GarbagePt getGarbagePtById(Integer id) {
+        return  garbagePtRepository.findGarbagePtById(id);
+    }
+
+    public List<GarbagePt> searchGarbagePoints(String query) {
+        return garbagePtRepository.findByNameIn(query);
+    }
 }

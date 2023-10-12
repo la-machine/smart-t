@@ -1,8 +1,8 @@
 package com.bezkoder.springjwt.controllers;
-import com.bezkoder.springjwt.models.Board;
 import com.bezkoder.springjwt.models.GarbagePt;
-import com.bezkoder.springjwt.security.services.BoardService;
+import com.bezkoder.springjwt.models.WasteLevel;
 import com.bezkoder.springjwt.security.services.GarbageService;
+import com.bezkoder.springjwt.security.services.WasteLevelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
-public class BoardController {
+public class WasteLevelController {
 
-        private final BoardService boardService;
+        private final WasteLevelService boardService;
 
         @GetMapping("/all")
         @PreAuthorize("hasRole('ADMIN')")
-        public List<Board> allAccess () {
+        public List<WasteLevel> allAccess () {
             return boardService.getAllBoard();
         }
 
@@ -27,7 +27,8 @@ public class BoardController {
 
         @PostMapping("/add")
         @PreAuthorize(" hasRole('ADMIN')")
-        public Board addBoard (@RequestBody Board board){
+        public WasteLevel addBoard (@RequestBody WasteLevel board){
+
         return boardService.addBoard(board);
     }
         @DeleteMapping("/delete/{id}")
@@ -38,7 +39,7 @@ public class BoardController {
 
         @PutMapping("/update/{id}")
         @PreAuthorize("hasRole('ADMIN')")
-        public Board updateBoard (@PathVariable Integer id, @RequestBody Board board){
+        public WasteLevel updateBoard (@PathVariable Integer id, @RequestBody WasteLevel board){
         return boardService.updateBoard(id, board);
 
     }
@@ -48,5 +49,9 @@ public class BoardController {
         public String adminAccess () {
         return "Admin Board.";
 
+    }
+    @PostMapping("/garbage-point/waste-level/{id}")
+    public GarbagePt addWasteLevelToGarbagePoint(@PathVariable Integer id, @RequestBody WasteLevel wasteLevel){
+            return boardService.addWasteLevelToGarbagePoint(id,wasteLevel);
     }
 }
