@@ -137,7 +137,7 @@ public class AuthController {
   }
 
   @PutMapping("users/update/{id}")
-  public User updateUser(@PathVariable Integer id, @RequestBody User user){
+  public User updateUser(@PathVariable Integer id, @RequestBody SignupRequest user){
     User user1 = userRepository.findUserById(id);
     user1.setFirstname(user.getFirstname());
     user1.setLastname(user.getLastname());
@@ -145,6 +145,33 @@ public class AuthController {
     user1.setPassword(user.getPassword());
     user1.setAddress(user.getAddress());
     user1.setPhone(user.getPhone());
+    Set<String> strRoles = user.getRole();
+    Set<Role> roles = new HashSet<>();
+
+    if (strRoles == null) {
+      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+      roles.add(userRole);
+    } else {
+      strRoles.forEach(role -> {
+        switch (role) {
+          case "ROLE_ADMIN":
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(adminRole);
+
+            break;
+
+          default:
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        }
+
+      });
+
+    }
+    user1.setRoles(roles);
     return userRepository.save(user1);
   }
 }

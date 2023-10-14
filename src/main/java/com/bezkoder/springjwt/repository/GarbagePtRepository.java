@@ -10,5 +10,6 @@ import java.util.List;
 public interface GarbagePtRepository extends JpaRepository<GarbagePt,Integer> {
     GarbagePt findGarbagePtById(Integer id);
 
-    List<GarbagePt> findByNameIn(String query);
+    List<GarbagePt> findGarbagePtByNameContaining (String name);
+
 }

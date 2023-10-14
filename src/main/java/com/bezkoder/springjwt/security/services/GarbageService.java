@@ -5,6 +5,7 @@ import com.bezkoder.springjwt.repository.GarbagePtRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -17,6 +18,8 @@ public class GarbageService {
     }
 
     public GarbagePt addGarbagePoint(GarbagePt garbagePt) {
+        garbagePt.setCreatedOn(LocalDate.now());
+        garbagePt.setWasteLevels("0");
         return garbagePtRepository.save(garbagePt);
     }
 
@@ -26,11 +29,7 @@ public class GarbageService {
 
     public GarbagePt updateGarbagePoint(Integer id, GarbagePt garbagePt) {
         GarbagePt garbagePt1 =  garbagePtRepository.findGarbagePtById(id);
-        garbagePt1.setName(garbagePt.getName());
-        garbagePt1.setTown(garbagePt.getTown());
-        garbagePt1.setLon(garbagePt.getLon());
-        garbagePt1.setLat(garbagePt.getLat());
-        garbagePt1.setCreatedOn(garbagePt.getCreatedOn());
+       garbagePt1.setWasteLevels(garbagePt.getWasteLevels());
         return garbagePtRepository.save(garbagePt1);
     }
 
@@ -38,7 +37,20 @@ public class GarbageService {
         return  garbagePtRepository.findGarbagePtById(id);
     }
 
-    public List<GarbagePt> searchGarbagePoints(String query) {
-        return garbagePtRepository.findByNameIn(query);
+
+    public List<GarbagePt> searchGarbagePoints(String name) {
+        return garbagePtRepository.findGarbagePtByNameContaining(name);
+    }
+
+    public void addWasteLevelToGarbagePoint(Integer id, String wasteLevel) {
+        GarbagePt garbagePt = garbagePtRepository.findGarbagePtById(id);
+        if (garbagePt!=null){
+            garbagePt.setWasteLevels(wasteLevel);
+            garbagePtRepository.save(garbagePt);
+        }
+        else {
+            throw new RuntimeException("No waste level updated !!");
+        }
+
     }
 }

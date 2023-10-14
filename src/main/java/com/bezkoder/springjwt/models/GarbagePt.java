@@ -21,13 +21,9 @@ public class GarbagePt {
     private Integer id;
     private String name;
     private String town;
-    private String lat;
-    private String lon;
+    private Double lat;
+    private Double lon;
     private LocalDate createdOn;
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name = "garbage_point_id")
-    private List<WasteLevel> wasteLevels;
-    public LocalDate getCreatedOn() {
-        return LocalDate.now();
-    }
+    private String wasteLevels;
+
 }
