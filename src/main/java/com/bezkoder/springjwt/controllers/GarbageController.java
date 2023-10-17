@@ -57,6 +57,7 @@ public class GarbageController {
   }
 
   @PutMapping("/assignPersonel")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> assignPersonel(@PathVariable Integer id, @RequestBody String email){
     return garbageService.assignPersonel(id,email);
   }
