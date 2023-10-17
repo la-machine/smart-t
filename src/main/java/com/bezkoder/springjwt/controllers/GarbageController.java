@@ -3,7 +3,8 @@ package com.bezkoder.springjwt.controllers;
 import com.bezkoder.springjwt.models.GarbagePt;
 import com.bezkoder.springjwt.security.services.GarbageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,5 +54,11 @@ public class GarbageController {
   @PutMapping(value = "/wasteLevel/{id}")
   public void addWasteLevelToGarbagePoint(@PathVariable Integer id,@RequestBody String wasteLevel){
     garbageService.addWasteLevelToGarbagePoint(id,wasteLevel);
+  }
+
+  @PutMapping("/assignPersonel")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<?> assignPersonel(@PathVariable Integer id, @RequestBody String email){
+    return garbageService.assignPersonel(id,email);
   }
 }

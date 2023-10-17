@@ -1,18 +1,25 @@
 package com.bezkoder.springjwt.security.services;
 
 import com.bezkoder.springjwt.models.GarbagePt;
+import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.repository.GarbagePtRepository;
+import com.bezkoder.springjwt.repository.UserRepository;
+
 import lombok.AllArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class GarbageService {
     private final GarbagePtRepository garbagePtRepository;
     private final GarbageAlert garbageAlert;
+    private final UserRepository userRepository;
 
     public List<GarbagePt> getAllGarbagePoint() {
         return garbagePtRepository.findAll();
@@ -61,5 +68,16 @@ public class GarbageService {
         if(wasteLevel >= 80){
             garbageAlert.sendsAlert(garbagePt);
         }
+    }
+
+    public ResponseEntity<?> assignPersonel(Integer id, String username) {
+        Optional<User> userExist = userRepository.findByUsername(username);
+        if(!userExist.isPresent()){
+            return ResponseEntity.status(400).body("User "+ username + "does not exist");
+        }
+        GarbagePt garbagePt = garbagePtRepository.findGarbagePtById(id);
+        garbagePt.setUser(userExist.get());
+        
+        return ResponseEntity.status(200).body(username + "assign to "+ garbagePt.getName() + "successfully" );
     }
 }
