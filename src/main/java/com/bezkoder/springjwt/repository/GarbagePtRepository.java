@@ -11,5 +11,6 @@ public interface GarbagePtRepository extends JpaRepository<GarbagePt,Integer> {
     GarbagePt findGarbagePtById(Integer id);
 
     List<GarbagePt> findGarbagePtByNameContaining (String name);
+    List<GarbagePt> findByWasteLevels(String level);
 
 }

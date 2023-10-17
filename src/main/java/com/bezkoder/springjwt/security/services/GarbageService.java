@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GarbageService {
     private final GarbagePtRepository garbagePtRepository;
+    private final GarbageAlert garbageAlert;
 
     public List<GarbagePt> getAllGarbagePoint() {
         return garbagePtRepository.findAll();
@@ -47,10 +48,18 @@ public class GarbageService {
         if (garbagePt!=null){
             garbagePt.setWasteLevels(wasteLevel);
             garbagePtRepository.save(garbagePt);
+            checkAlert(garbagePt);
         }
         else {
             throw new RuntimeException("No waste level updated !!");
         }
 
+    }
+
+    public void checkAlert(GarbagePt garbagePt){
+        int wasteLevel = Integer.parseInt(garbagePt.getWasteLevels());
+        if(wasteLevel >= 80){
+            garbageAlert.sendsAlert(garbagePt);
+        }
     }
 }

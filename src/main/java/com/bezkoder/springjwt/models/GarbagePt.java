@@ -26,4 +26,8 @@ public class GarbagePt {
     private LocalDate createdOn;
     private String wasteLevels;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

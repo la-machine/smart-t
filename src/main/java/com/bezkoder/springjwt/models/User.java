@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.models;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -49,6 +50,8 @@ public class User {
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
+
+
 
   public User(String username, String firstname, String lastname, String email, String address, String phone, String password) {
     this.username = username;
